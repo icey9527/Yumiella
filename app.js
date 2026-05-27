@@ -210,14 +210,55 @@ function pickRandom() {
   renderCurrent();
 }
 
-function copyLink() {
-  navigator.clipboard.writeText(window.location.href);
+async function copyLink() {
+  const success = await copyText(window.location.href);
+  if (!success && navigator.share) {
+    try {
+      await navigator.share({
+        title: document.title,
+        url: window.location.href
+      });
+      return;
+    } catch {
+      return;
+    }
+  }
 }
 
-function copyText(value) {
-  if (value) {
-    navigator.clipboard.writeText(value);
+async function copyText(value) {
+  if (!value) {
+    return false;
   }
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return true;
+    }
+  } catch {
+    // Fall through to legacy copy path for mobile browsers.
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = value;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  textarea.style.pointerEvents = "none";
+  document.body.append(textarea);
+  textarea.focus();
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+
+  let success = false;
+  try {
+    success = document.execCommand("copy");
+  } catch {
+    success = false;
+  }
+
+  textarea.remove();
+  return success;
 }
 
 function generateImage() {
@@ -371,9 +412,15 @@ function shorten(text, maxLength) {
 }
 
 document.querySelector("#randomButton").addEventListener("click", pickRandom);
-document.querySelector("#copyLinkButton").addEventListener("click", copyLink);
-document.querySelector("#copyJpButton").addEventListener("click", () => copyText(quoteJp.textContent));
-document.querySelector("#copyZhButton").addEventListener("click", () => copyText(quoteZh.textContent));
+document.querySelector("#copyLinkButton").addEventListener("click", () => {
+  void copyLink();
+});
+document.querySelector("#copyJpButton").addEventListener("click", () => {
+  void copyText(quoteJp.textContent);
+});
+document.querySelector("#copyZhButton").addEventListener("click", () => {
+  void copyText(quoteZh.textContent);
+});
 document.querySelector("#imageButton").addEventListener("click", generateImage);
 
 volumeFilter.addEventListener("change", () => {
