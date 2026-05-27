@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ユミエラ神人语录集 - 编辑器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="editor">
+    <main class="editor-shell">
+      <section class="editor-panel editor-panel--intro">
+        <p class="eyebrow">Local Editor</p>
+        <h1>ユミエラ神人语录集</h1>
+        <p class="editor-copy">
+          这个页面只在本地辅助维护数据，不需要部署到线上。你可以直接编辑 JSON，也可以用表单追加语录。
+        </p>
+        <div class="editor-actions">
+          <button id="addQuoteButton" class="button" type="button">新增一条</button>
+          <button id="formatButton" class="button button--ghost" type="button">格式化 JSON</button>
+          <button id="downloadButton" class="button button--ghost" type="button">下载 quotes.json</button>
+        </div>
+      </section>
+
+      <section class="editor-grid">
+        <article class="editor-panel">
+          <h2>表单录入</h2>
+          <form id="quoteForm" class="form">
+            <label class="label" for="formVolume">卷号</label>
+            <input id="formVolume" class="input" type="number" min="1" placeholder="例如 1" required />
+
+            <label class="label" for="formPage">页号</label>
+            <input id="formPage" class="input" type="number" min="1" placeholder="例如 23" required />
+
+            <label class="label" for="formJp">日文原文</label>
+            <textarea id="formJp" class="textarea" rows="5" required></textarea>
+
+            <label class="label" for="formZh">中文译文</label>
+            <textarea id="formZh" class="textarea" rows="5" required></textarea>
+
+            <button class="button" type="submit">加入 JSON</button>
+          </form>
+        </article>
+
+        <article class="editor-panel">
+          <div class="section__title">
+            <h2>JSON 数据</h2>
+            <span id="editorStatus" class="muted">会自动补全缺失 id</span>
+          </div>
+          <textarea id="jsonEditor" class="json-editor" spellcheck="false"></textarea>
+        </article>
+      </section>
+    </main>
+
+    <script type="module" src="./editor.js"></script>
+  </body>
+</html>
