@@ -90,6 +90,10 @@ textarea {
   padding: 18px 18px 28px;
 }
 
+.main__inner {
+  width: min(980px, 100%);
+}
+
 .topbar {
   display: flex;
   align-items: flex-start;
@@ -353,6 +357,83 @@ textarea {
   z-index: 15;
 }
 
+.image-dialog {
+  width: min(1180px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: rgba(250, 244, 236, 0.98);
+  box-shadow: 0 24px 80px rgba(43, 34, 27, 0.22);
+}
+
+.image-dialog::backdrop {
+  background: rgba(43, 34, 27, 0.42);
+  backdrop-filter: blur(4px);
+}
+
+.image-editor {
+  display: grid;
+  gap: 20px;
+  padding: 22px;
+}
+
+.image-editor__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.image-editor__head h2 {
+  margin: 0;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", "Songti SC", serif;
+  font-size: 1.5rem;
+}
+
+.image-editor__body {
+  display: grid;
+  gap: 18px;
+}
+
+.image-editor__controls,
+.image-editor__preview {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 252, 245, 0.86);
+  box-shadow: var(--shadow);
+}
+
+.image-editor__controls {
+  padding: 18px;
+}
+
+.image-editor__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 14px;
+}
+
+.image-editor__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.image-editor__preview {
+  padding: 16px;
+  overflow: auto;
+}
+
+#imagePreviewCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #f7f0e3 0%, #efe5d2 100%);
+}
+
 @media (max-width: 959px) {
   .topbar {
     flex-direction: column;
@@ -389,6 +470,28 @@ textarea {
   .sidebar {
     width: min(86vw, 390px);
     padding: 22px 16px 18px;
+  }
+
+  .main__inner {
+    width: 100%;
+  }
+
+  .image-dialog {
+    width: calc(100vw - 12px);
+    max-height: calc(100vh - 12px);
+    border-radius: 22px;
+  }
+
+  .image-editor {
+    padding: 14px;
+  }
+
+  .image-editor__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .image-editor__actions {
+    flex-direction: column;
   }
 }
 
@@ -440,12 +543,21 @@ textarea {
     padding: 28px 34px;
   }
 
+  .main__inner {
+    margin: 0 auto;
+  }
+
   .topbar {
     align-items: center;
+    justify-content: center;
   }
 
   .hero {
     padding-top: 28px;
+  }
+
+  .topbar__actions {
+    justify-content: center;
   }
 
   #menuButton,
@@ -459,5 +571,10 @@ textarea {
 
   .quote-card {
     padding: 34px;
+  }
+
+  .image-editor__body {
+    grid-template-columns: 360px minmax(0, 1fr);
+    align-items: start;
   }
 }

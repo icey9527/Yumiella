@@ -17,8 +17,22 @@ const searchInput = document.querySelector("#searchInput");
 const menuButton = document.querySelector("#menuButton");
 const sidebar = document.querySelector("#sidebar");
 const backdrop = document.querySelector("#backdrop");
+const imageDialog = document.querySelector("#imageDialog");
+const imagePreviewCanvas = document.querySelector("#imagePreviewCanvas");
+
+const imageControls = {
+  jpFont: document.querySelector("#imageJpFont"),
+  zhFont: document.querySelector("#imageZhFont"),
+  jpSize: document.querySelector("#imageJpSize"),
+  zhSize: document.querySelector("#imageZhSize"),
+  metaSize: document.querySelector("#imageMetaSize"),
+  padding: document.querySelector("#imagePadding"),
+  jpLineHeight: document.querySelector("#imageJpLineHeight"),
+  zhLineHeight: document.querySelector("#imageZhLineHeight")
+};
 
 const groupState = new Set();
+let imageEditorState = null;
 
 async function loadQuotes() {
   const response = await fetch("./data/quotes.json");
@@ -262,21 +276,96 @@ async function copyText(value) {
 }
 
 function generateImage() {
+  openImageDialog();
+}
+
+function openImageDialog() {
   const quote = state.filteredQuotes.find((item) => item.id === state.currentId);
   if (!quote) {
     return;
   }
 
-  const width = 1400;
-  const padding = 110;
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
+  imageEditorState = createImageStyleFromPage(quote);
+  syncImageControls();
+  renderImagePreview();
+  imageDialog.showModal();
+}
 
-  const jpFont = "38px Georgia, serif";
-  const zhFont = "56px 'Segoe UI', 'PingFang SC', sans-serif";
-  const metaFont = "28px 'Segoe UI', sans-serif";
-  const jpLineHeight = 54;
-  const zhLineHeight = 82;
+function createImageStyleFromPage(quote) {
+  const jpStyle = window.getComputedStyle(quoteJp);
+  const zhStyle = window.getComputedStyle(quoteZh);
+  const metaStyle = window.getComputedStyle(metaVolume);
+
+  return {
+    quote,
+    width: 1400,
+    padding: 110,
+    jpFontFamily: normalizeFontFamily(jpStyle.fontFamily, imageControls.jpFont.value),
+    zhFontFamily: normalizeFontFamily(zhStyle.fontFamily, imageControls.zhFont.value),
+    metaFontFamily: normalizeFontFamily(metaStyle.fontFamily, "'Songti SC', 'SimSun', 'Noto Serif SC', serif"),
+    jpSize: Math.round(parseFloat(jpStyle.fontSize) * 2.2),
+    zhSize: Math.round(parseFloat(zhStyle.fontSize) * 2.1),
+    metaSize: Math.round(parseFloat(metaStyle.fontSize) * 1.75),
+    jpLineHeight: Math.round(parseFloat(jpStyle.lineHeight) * 1.9),
+    zhLineHeight: Math.round(parseFloat(zhStyle.lineHeight) * 1.8)
+  };
+}
+
+function normalizeFontFamily(fontFamily, fallback) {
+  if (!fontFamily || fontFamily === "inherit") {
+    return fallback;
+  }
+  return fontFamily;
+}
+
+function syncImageControls() {
+  imageControls.jpFont.value = pickMatchingOption(imageControls.jpFont, imageEditorState.jpFontFamily);
+  imageControls.zhFont.value = pickMatchingOption(imageControls.zhFont, imageEditorState.zhFontFamily);
+  imageControls.jpSize.value = String(imageEditorState.jpSize);
+  imageControls.zhSize.value = String(imageEditorState.zhSize);
+  imageControls.metaSize.value = String(imageEditorState.metaSize);
+  imageControls.padding.value = String(imageEditorState.padding);
+  imageControls.jpLineHeight.value = String(imageEditorState.jpLineHeight);
+  imageControls.zhLineHeight.value = String(imageEditorState.zhLineHeight);
+}
+
+function pickMatchingOption(select, fontFamily) {
+  const options = [...select.options];
+  const matched = options.find((option) => option.value === fontFamily)
+    || options.find((option) => fontFamily.includes(option.value.split(",")[0].replaceAll("'", "").trim()));
+  return matched ? matched.value : select.options[0].value;
+}
+
+function updateImageEditorState() {
+  if (!imageEditorState) {
+    return;
+  }
+
+  imageEditorState.jpFontFamily = imageControls.jpFont.value;
+  imageEditorState.zhFontFamily = imageControls.zhFont.value;
+  imageEditorState.metaFontFamily = imageControls.zhFont.value.includes("KaiTi")
+    ? "'Songti SC', 'SimSun', 'Noto Serif SC', serif"
+    : imageControls.zhFont.value;
+  imageEditorState.jpSize = Number(imageControls.jpSize.value);
+  imageEditorState.zhSize = Number(imageControls.zhSize.value);
+  imageEditorState.metaSize = Number(imageControls.metaSize.value);
+  imageEditorState.padding = Number(imageControls.padding.value);
+  imageEditorState.jpLineHeight = Number(imageControls.jpLineHeight.value);
+  imageEditorState.zhLineHeight = Number(imageControls.zhLineHeight.value);
+}
+
+function renderImagePreview() {
+  if (!imageEditorState) {
+    return;
+  }
+
+  const canvas = imagePreviewCanvas;
+  const context = canvas.getContext("2d");
+  const { quote, width, padding, jpFontFamily, zhFontFamily, metaFontFamily, jpSize, zhSize, metaSize, jpLineHeight, zhLineHeight } = imageEditorState;
+
+  const jpFont = `${jpSize}px ${jpFontFamily}`;
+  const zhFont = `${zhSize}px ${zhFontFamily}`;
+  const metaFont = `${metaSize}px ${metaFontFamily}`;
 
   const jpLines = wrapText(context, quote.jp, width - padding * 2, jpFont);
   const zhLines = wrapText(context, quote.zh, width - padding * 2, zhFont);
@@ -296,23 +385,14 @@ function generateImage() {
   context.arc(120, 120, 180, 0, Math.PI * 2);
   context.fill();
 
-  roundRect(
-    context,
-    64,
-    54,
-    width - 128,
-    height - 108,
-    36,
-    "rgba(255, 252, 245, 0.9)",
-    "rgba(62, 43, 29, 0.14)"
-  );
+  roundRect(context, 64, 54, width - 128, height - 108, 36, "rgba(255, 252, 245, 0.9)", "rgba(62, 43, 29, 0.14)");
 
   let y = 130;
   context.fillStyle = "#8a4f2d";
   context.font = metaFont;
   context.fillText(`卷 ${quote.volume} · 页 ${quote.page}`, padding, y);
 
-  y += 76;
+  y += Math.max(64, metaSize + 34);
   context.fillStyle = "#5c4b3f";
   context.font = jpFont;
   drawWrappedText(context, jpLines, padding, y, jpLineHeight);
@@ -328,11 +408,28 @@ function generateImage() {
   context.fillStyle = "#2e241d";
   context.font = zhFont;
   drawWrappedText(context, zhLines, padding, y, zhLineHeight);
+}
 
+function downloadImage() {
+  if (!imageEditorState) {
+    return;
+  }
+
+  renderImagePreview();
   const link = document.createElement("a");
-  link.href = canvas.toDataURL("image/png");
-  link.download = `${quote.id}.png`;
+  link.href = imagePreviewCanvas.toDataURL("image/png");
+  link.download = `${imageEditorState.quote.id}.png`;
   link.click();
+}
+
+function resetImageStyle() {
+  const quote = state.filteredQuotes.find((item) => item.id === state.currentId);
+  if (!quote) {
+    return;
+  }
+  imageEditorState = createImageStyleFromPage(quote);
+  syncImageControls();
+  renderImagePreview();
 }
 
 function wrapText(context, text, maxWidth, font) {
@@ -422,6 +519,18 @@ document.querySelector("#copyZhButton").addEventListener("click", () => {
   void copyText(quoteZh.textContent);
 });
 document.querySelector("#imageButton").addEventListener("click", generateImage);
+document.querySelector("#downloadImageButton").addEventListener("click", downloadImage);
+document.querySelector("#resetImageStyleButton").addEventListener("click", resetImageStyle);
+document.querySelector("#closeImageDialogButton").addEventListener("click", () => {
+  imageDialog.close();
+});
+
+Object.values(imageControls).forEach((control) => {
+  control.addEventListener("input", () => {
+    updateImageEditorState();
+    renderImagePreview();
+  });
+});
 
 volumeFilter.addEventListener("change", () => {
   groupState.clear();

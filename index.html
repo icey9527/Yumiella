@@ -35,55 +35,120 @@
       </aside>
 
       <main class="main">
-        <header class="topbar">
-          <button id="menuButton" class="button button--ghost" type="button" aria-expanded="false" aria-controls="sidebar">
-            目录
-          </button>
-          <div class="topbar__actions">
-            <button id="randomButton" class="button" type="button">随机一条</button>
-            <button id="imageButton" class="button button--ghost" type="button">生成图片</button>
-            <button id="copyLinkButton" class="button button--ghost" type="button">复制链接</button>
-          </div>
-        </header>
+        <div class="main__inner">
+          <header class="topbar">
+            <button id="menuButton" class="button button--ghost" type="button" aria-expanded="false" aria-controls="sidebar">
+              目录
+            </button>
+            <div class="topbar__actions">
+              <button id="randomButton" class="button" type="button">随机一条</button>
+              <button id="imageButton" class="button button--ghost" type="button">生成图片</button>
+              <button id="copyLinkButton" class="button button--ghost" type="button">复制链接</button>
+            </div>
+          </header>
 
-        <section class="hero">
-          <article class="quote-card" id="quoteCard" aria-live="polite">
-            <div class="quote-card__meta">
-              <span id="metaVolume">卷 -</span>
-              <span id="metaPage">页 -</span>
-            </div>
-            <div class="quote-card__body">
-              <section class="quote-block">
-                <div class="quote-block__head">
-                  <span class="quote-block__label">原文</span>
-                  <button id="copyJpButton" class="icon-button" type="button" aria-label="复制日文原文" title="复制日文原文">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="9" y="9" width="10" height="10" rx="2"></rect>
-                      <rect x="5" y="5" width="10" height="10" rx="2"></rect>
-                    </svg>
-                  </button>
-                </div>
-                <p class="quote-card__jp" id="quoteJp">加载中...</p>
-              </section>
-              <section class="quote-block quote-block--primary">
-                <div class="quote-block__head">
-                  <span class="quote-block__label">译文</span>
-                  <button id="copyZhButton" class="icon-button" type="button" aria-label="复制中文译文" title="复制中文译文">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="9" y="9" width="10" height="10" rx="2"></rect>
-                      <rect x="5" y="5" width="10" height="10" rx="2"></rect>
-                    </svg>
-                  </button>
-                </div>
-                <p class="quote-card__zh" id="quoteZh"></p>
-              </section>
-            </div>
-          </article>
-        </section>
+          <section class="hero">
+            <article class="quote-card" id="quoteCard" aria-live="polite">
+              <div class="quote-card__meta">
+                <span id="metaVolume">卷 -</span>
+                <span id="metaPage">页 -</span>
+              </div>
+              <div class="quote-card__body">
+                <section class="quote-block">
+                  <div class="quote-block__head">
+                    <span class="quote-block__label">原文</span>
+                    <button id="copyJpButton" class="icon-button" type="button" aria-label="复制日文原文" title="复制日文原文">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                        <rect x="5" y="5" width="10" height="10" rx="2"></rect>
+                      </svg>
+                    </button>
+                  </div>
+                  <p class="quote-card__jp" id="quoteJp">加载中...</p>
+                </section>
+                <section class="quote-block quote-block--primary">
+                  <div class="quote-block__head">
+                    <span class="quote-block__label">译文</span>
+                    <button id="copyZhButton" class="icon-button" type="button" aria-label="复制中文译文" title="复制中文译文">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                        <rect x="5" y="5" width="10" height="10" rx="2"></rect>
+                      </svg>
+                    </button>
+                  </div>
+                  <p class="quote-card__zh" id="quoteZh"></p>
+                </section>
+              </div>
+            </article>
+          </section>
+        </div>
       </main>
     </div>
 
     <div id="backdrop" class="backdrop" hidden></div>
+    <dialog id="imageDialog" class="image-dialog">
+      <form method="dialog" class="image-editor">
+        <div class="image-editor__head">
+          <div>
+            <p class="eyebrow">Image Export</p>
+            <h2>图片导出编辑器</h2>
+          </div>
+          <button id="closeImageDialogButton" class="icon-button" type="button" aria-label="关闭图片导出编辑器" title="关闭">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6L18 18"></path>
+              <path d="M18 6L6 18"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="image-editor__body">
+          <section class="image-editor__controls">
+            <div class="image-editor__grid">
+              <label class="label" for="imageJpFont">日文字体</label>
+              <select id="imageJpFont" class="select">
+                <option value="'Yu Mincho', 'Hiragino Mincho ProN', 'MS Mincho', 'Noto Serif JP', serif">明朝体</option>
+                <option value="'Yu Gothic', 'Hiragino Sans', 'Meiryo', sans-serif">ゴシック体</option>
+                <option value="'Noto Serif JP', serif">Noto Serif JP</option>
+              </select>
+
+              <label class="label" for="imageZhFont">中文字体</label>
+              <select id="imageZhFont" class="select">
+                <option value="'STKaiti', 'KaiTi', 'Songti SC', 'SimSun', 'Noto Serif SC', serif">楷体 / 宋体</option>
+                <option value="'Songti SC', 'SimSun', 'Noto Serif SC', serif">宋体</option>
+                <option value="'Microsoft YaHei', 'PingFang SC', sans-serif">雅黑</option>
+              </select>
+
+              <label class="label" for="imageJpSize">日文大小</label>
+              <input id="imageJpSize" class="input" type="number" min="20" max="72" step="1" />
+
+              <label class="label" for="imageZhSize">中文大小</label>
+              <input id="imageZhSize" class="input" type="number" min="24" max="96" step="1" />
+
+              <label class="label" for="imageMetaSize">卷页大小</label>
+              <input id="imageMetaSize" class="input" type="number" min="16" max="48" step="1" />
+
+              <label class="label" for="imagePadding">内边距</label>
+              <input id="imagePadding" class="input" type="number" min="40" max="180" step="2" />
+
+              <label class="label" for="imageJpLineHeight">日文行距</label>
+              <input id="imageJpLineHeight" class="input" type="number" min="28" max="100" step="1" />
+
+              <label class="label" for="imageZhLineHeight">中文行距</label>
+              <input id="imageZhLineHeight" class="input" type="number" min="36" max="120" step="1" />
+            </div>
+
+            <div class="image-editor__actions">
+              <button id="resetImageStyleButton" class="button button--ghost" type="button">恢复默认</button>
+              <button id="downloadImageButton" class="button" type="button">下载图片</button>
+            </div>
+          </section>
+
+          <section class="image-editor__preview">
+            <canvas id="imagePreviewCanvas" width="1400" height="900"></canvas>
+          </section>
+        </div>
+      </form>
+    </dialog>
     <script type="module" src="./app.js"></script>
   </body>
 </html>
