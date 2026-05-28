@@ -153,11 +153,26 @@ textarea {
   gap: 10px;
 }
 
+.quote-block__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .quote-block__label {
   color: var(--muted);
   font-size: 0.82rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.quote-block--secondary {
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.quote-block--secondary.is-collapsed .quote-card__jp {
+  display: none;
 }
 
 .quote-card__jp,
@@ -216,6 +231,12 @@ textarea {
   cursor: pointer;
   transition: transform 140ms ease, background 140ms ease;
   min-height: 52px;
+}
+
+.button--small {
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: 0.92rem;
 }
 
 .button:hover {

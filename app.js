@@ -18,6 +18,8 @@ const sidebar = document.querySelector("#sidebar");
 const backdrop = document.querySelector("#backdrop");
 const imageDialog = document.querySelector("#imageDialog");
 const imagePreviewCanvas = document.querySelector("#imagePreviewCanvas");
+const jpBlock = document.querySelector("#jpBlock");
+const toggleJpButton = document.querySelector("#toggleJpButton");
 
 const imageControls = {
   jpFont: document.querySelector("#imageJpFont"),
@@ -155,6 +157,7 @@ function renderCurrent() {
   quoteJp.innerHTML = renderMultilineText(quote.jp);
   quoteZh.innerHTML = renderMultilineText(quote.zh);
   metaVolume.textContent = `卷 ${quote.volume}`;
+  setJpCollapsed(true);
 }
 
 function pickInitialQuote() {
@@ -495,6 +498,13 @@ function closeSidebar() {
   menuButton.setAttribute("aria-expanded", "false");
 }
 
+function setJpCollapsed(collapsed) {
+  jpBlock.classList.toggle("is-collapsed", collapsed);
+  quoteJp.hidden = collapsed;
+  toggleJpButton.textContent = collapsed ? "展开原文" : "收起原文";
+  toggleJpButton.setAttribute("aria-expanded", String(!collapsed));
+}
+
 function escapeHtml(text) {
   return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
@@ -520,6 +530,9 @@ document.querySelector("#copyJpButton").addEventListener("click", () => {
 });
 document.querySelector("#copyZhButton").addEventListener("click", () => {
   void copyText(quoteZh.textContent);
+});
+toggleJpButton.addEventListener("click", () => {
+  setJpCollapsed(!jpBlock.classList.contains("is-collapsed"));
 });
 document.querySelector("#imageButton").addEventListener("click", generateImage);
 document.querySelector("#downloadImageButton").addEventListener("click", downloadImage);

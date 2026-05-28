@@ -12,7 +12,7 @@
         <div class="sidebar__head">
           <p class="eyebrow">Quote Index</p>
           <h1>ユミエラ神人语录集</h1>
-          <p class="sidebar__text">随机展示、按卷浏览、支持分享单条。</p>
+          <p class="sidebar__text">帮助我们更好地了解ユミエラ的脑回路。</p>
         </div>
 
         <div class="sidebar__section">
@@ -53,18 +53,6 @@
                 <span id="metaVolume">卷 -</span>
               </div>
               <div class="quote-card__body">
-                <section class="quote-block">
-                  <div class="quote-block__head">
-                    <span class="quote-block__label">原文</span>
-                    <button id="copyJpButton" class="icon-button" type="button" aria-label="复制日文原文" title="复制日文原文">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <rect x="9" y="9" width="10" height="10" rx="2"></rect>
-                        <rect x="5" y="5" width="10" height="10" rx="2"></rect>
-                      </svg>
-                    </button>
-                  </div>
-                  <p class="quote-card__jp" id="quoteJp">加载中...</p>
-                </section>
                 <section class="quote-block quote-block--primary">
                   <div class="quote-block__head">
                     <span class="quote-block__label">译文</span>
@@ -76,6 +64,23 @@
                     </button>
                   </div>
                   <p class="quote-card__zh" id="quoteZh"></p>
+                </section>
+                <section class="quote-block quote-block--secondary is-collapsed" id="jpBlock">
+                  <div class="quote-block__head">
+                    <span class="quote-block__label">原文</span>
+                    <div class="quote-block__actions">
+                      <button id="toggleJpButton" class="button button--ghost button--small" type="button" aria-expanded="false">
+                        展开原文
+                      </button>
+                      <button id="copyJpButton" class="icon-button" type="button" aria-label="复制日文原文" title="复制日文原文">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                          <rect x="5" y="5" width="10" height="10" rx="2"></rect>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <p class="quote-card__jp" id="quoteJp" hidden>加载中...</p>
                 </section>
               </div>
             </article>
