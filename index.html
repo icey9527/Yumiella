@@ -65,23 +65,21 @@
                   </div>
                   <p class="quote-card__zh" id="quoteZh"></p>
                 </section>
-                <section class="quote-block quote-block--secondary is-collapsed" id="jpBlock">
-                  <div class="quote-block__head">
+                <details class="quote-block quote-block--secondary" id="jpBlock">
+                  <summary class="quote-block__summary">
                     <span class="quote-block__label">原文</span>
-                    <div class="quote-block__actions">
-                      <button id="toggleJpButton" class="button button--ghost button--small" type="button" aria-expanded="false">
-                        展开原文
-                      </button>
-                      <button id="copyJpButton" class="icon-button" type="button" aria-label="复制日文原文" title="复制日文原文">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                          <rect x="9" y="9" width="10" height="10" rx="2"></rect>
-                          <rect x="5" y="5" width="10" height="10" rx="2"></rect>
-                        </svg>
-                      </button>
-                    </div>
+                    <span class="quote-block__summary-text">展开原文</span>
+                  </summary>
+                  <div class="quote-block__detail-actions">
+                    <button id="copyJpButton" class="icon-button" type="button" aria-label="复制日文原文" title="复制日文原文">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                        <rect x="5" y="5" width="10" height="10" rx="2"></rect>
+                      </svg>
+                    </button>
                   </div>
-                  <p class="quote-card__jp" id="quoteJp" hidden>加载中...</p>
-                </section>
+                  <p class="quote-card__jp" id="quoteJp">加载中...</p>
+                </details>
               </div>
             </article>
           </section>
