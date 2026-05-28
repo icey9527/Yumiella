@@ -6,9 +6,8 @@ export function slugifyQuote(quote, index) {
   }
 
   const volume = String(quote.volume ?? 0).padStart(2, "0");
-  const page = String(quote.page ?? 0).padStart(3, "0");
   const serial = String(index + 1).padStart(ID_PAD, "0");
-  return `v${volume}-p${page}-${serial}`;
+  return `v${volume}-${serial}`;
 }
 
 export function normalizeQuotes(input) {
@@ -22,8 +21,7 @@ export function normalizeQuotes(input) {
       id: slugifyQuote(item, index),
       jp: String(item.jp).trim(),
       zh: String(item.zh).trim(),
-      volume: Number(item.volume) || 0,
-      page: Number(item.page) || 0
+      volume: Number(item.volume) || 0
     }));
 }
 

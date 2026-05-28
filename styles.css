@@ -172,15 +172,17 @@ textarea {
   color: #5c4b3f;
   line-height: 2;
   word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .quote-card__zh {
   color: #2e241d;
-  font-size: clamp(1.3rem, 2.5vw, 1.72rem);
-  font-weight: 520;
+  font-size: clamp(1.02rem, 1.8vw, 1.22rem);
+  font-weight: 400;
   font-family: "STKaiti", "KaiTi", "Songti SC", "SimSun", serif;
   line-height: 1.95;
   word-break: break-word;
+  white-space: pre-wrap;
 }
 
 .eyebrow {
@@ -300,7 +302,7 @@ textarea {
 }
 
 .quote-list__toggle strong {
-  font-weight: 600;
+  font-weight: 400;
   font-family: "Songti SC", "SimSun", serif;
 }
 
@@ -348,6 +350,10 @@ textarea {
   display: block;
   margin-top: 5px;
   color: var(--muted);
+}
+
+.quote-list__item strong {
+  font-weight: 400;
 }
 
 .backdrop {

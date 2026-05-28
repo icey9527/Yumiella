@@ -32,7 +32,6 @@ function addQuoteFromForm(event) {
   const formData = new FormData(form);
   const draft = {
     volume: Number(formData.get("volume") ?? document.querySelector("#formVolume").value),
-    page: Number(formData.get("page") ?? document.querySelector("#formPage").value),
     jp: String(formData.get("jp") ?? document.querySelector("#formJp").value).trim(),
     zh: String(formData.get("zh") ?? document.querySelector("#formZh").value).trim()
   };
@@ -76,7 +75,6 @@ form.addEventListener("submit", addQuoteFromForm);
 
 [
   ["formVolume", "volume"],
-  ["formPage", "page"],
   ["formJp", "jp"],
   ["formZh", "zh"]
 ].forEach(([id, name]) => {

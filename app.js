@@ -9,7 +9,6 @@ const state = {
 const quoteJp = document.querySelector("#quoteJp");
 const quoteZh = document.querySelector("#quoteZh");
 const metaVolume = document.querySelector("#metaVolume");
-const metaPage = document.querySelector("#metaPage");
 const quoteList = document.querySelector("#quoteList");
 const quoteCount = document.querySelector("#quoteCount");
 const volumeFilter = document.querySelector("#volumeFilter");
@@ -68,10 +67,8 @@ function applyFilter() {
         quote.jp,
         quote.zh,
         String(quote.volume),
-        String(quote.page),
         `第${quote.volume}卷`,
-        `卷${quote.volume}`,
-        `页${quote.page}`
+        `卷${quote.volume}`
       ]
         .join(" ")
         .toLowerCase();
@@ -126,8 +123,8 @@ function renderList() {
       button.type = "button";
       button.className = `quote-list__item button--ghost${quote.id === state.currentId ? " is-active" : ""}`;
       button.innerHTML = `
-        <strong>${escapeHtml(shorten(quote.zh, 18))}</strong>
-        <small>页 ${quote.page}</small>
+        <strong>${escapeHtml(shorten(compactSnippet(quote.zh), 18))}</strong>
+        <small>第 ${quote.volume} 卷</small>
       `;
       button.addEventListener("click", () => {
         state.currentId = quote.id;
@@ -152,14 +149,12 @@ function renderCurrent() {
     quoteJp.textContent = "当前筛选下没有语录。";
     quoteZh.textContent = "可以切换卷号，或者先补充数据。";
     metaVolume.textContent = "卷 -";
-    metaPage.textContent = "页 -";
     return;
   }
 
-  quoteJp.textContent = quote.jp;
-  quoteZh.textContent = quote.zh;
+  quoteJp.innerHTML = renderMultilineText(quote.jp);
+  quoteZh.innerHTML = renderMultilineText(quote.zh);
   metaVolume.textContent = `卷 ${quote.volume}`;
-  metaPage.textContent = `页 ${quote.page}`;
 }
 
 function pickInitialQuote() {
@@ -390,7 +385,7 @@ function renderImagePreview() {
   let y = 130;
   context.fillStyle = "#8a4f2d";
   context.font = metaFont;
-  context.fillText(`卷 ${quote.volume} · 页 ${quote.page}`, padding, y);
+  context.fillText(`第 ${quote.volume} 卷`, padding, y);
 
   y += Math.max(64, metaSize + 34);
   context.fillStyle = "#5c4b3f";
@@ -504,8 +499,16 @@ function escapeHtml(text) {
   return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
+function renderMultilineText(text) {
+  return escapeHtml(text).replace(/\r?\n/g, "<br>");
+}
+
 function shorten(text, maxLength) {
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+}
+
+function compactSnippet(text) {
+  return text.replace(/\s*\n+\s*/g, " ").replace(/\s{2,}/g, " ").trim();
 }
 
 document.querySelector("#randomButton").addEventListener("click", pickRandom);
